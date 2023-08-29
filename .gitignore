@@ -1,0 +1,29 @@
+# Misc
+logs/
+*.zip
+*~
+*.lock
+
+# Project
+node_modules/
+public/
+target/
+
+# Mac
+.DS_Store
+
+# JetBrains
+.idea/*
+.fleet/*
+*.iws
+*.iml
+
+# Devenv
+.devenv*
+devenv.local.nix
+
+# direnv
+.direnv
+
+# pre-commit
+.pre-commit-config.yaml

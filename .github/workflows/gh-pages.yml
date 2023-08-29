@@ -1,0 +1,28 @@
+name: Publish to Github Pages
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: Publish to GitHub Pages
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v5
+        node-version: '21'
+      # Download and run TailwindCSS
+      - name: TailwindCSS Build
+        run: |
+          npm run build:css
+          rm -rf node_modules
+
+      - name: Zola Deploy
+        uses: shalzz/zola-deploy-action@master
+        env:
+          PAGES_BRANCH: gh-pages
+          BUILD_DIR: .
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
