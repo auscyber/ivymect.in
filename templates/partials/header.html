@@ -5,28 +5,26 @@
   {% set current_path = section.path %}
 {% endif %}
 
-<header class="sticky top-0 w-full z-10">
-  <nav class="bg-green-100">
+<header class="sticky top-0 w-full z-10 font-mono">
+  <nav class="bg-purple-400 ">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-16">
-        <div class="flex items-center">
-          <div class="flex-shrink-0">
+      <div class="flex items-center justify-center h-30">
+        <div class="flex items-center h-full w-full">
+          <div class="flex-shrink-0 justify-self-start w-[10vw]">
             <a href="/" aria-label="{{ res.aria_to_homepage }}">
               <div class="h-8 w-8 text-gray-200 hover:text-white fill-current">
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor">
-                  <path d="M3 12L5 10M5 10L12 3L19 10M5 10V20C5 20.5523 5.44772 21 6 21H9M19 10L21 12M19 10V20C19 20.5523 18.5523 21 18 21H15M9 21C9.55228 21 10 20.5523 10 20V16C10 15.4477 10.4477 15 11 15H13C13.5523 15 14 15.4477 14 16V20C14 20.5523 14.4477 21 15 21M9 21H15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
+                ivy's site 
               </div>
             </a>
           </div>
-          <div class="hidden md:block">
-            <div class="ml-8 flex items-baseline">
+          <div class="hidden md:block ">
+            <div class="ml-8 flex items-center justify-between  grow">
               {% if config.extra.menu_pages %}
                 {% for entry in config.extra.menu_pages %}
                   {% if entry.url == current_path %}
-                    <span aria-current="page" class="px-3 py-2 ml-2 rounded-md font-medium text-cyan-200 bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-600">{{ entry.title }}</span>
+                    <span aria-current="page" class="px-3 py-5 ml-2 rounded-md font-medium text-cyan-200 bg-gray-900 focus:outline-none focus:text-white focus:bg-gray-600">{{ entry.title }}</span>
                   {% else %}
-                    <a class="px-3 py-2 ml-2 rounded-md font-medium text-amber-900 hover:text-white hover:bg-gray-700 focus:outline-none focus:text-white focus:bg-gray-600" href="{{ entry.url | safe }}" title="{{ entry.title }}">{{ entry.title }}</a>
+                    <a class="px-3 py-5 ml-2  rounded-md font-medium text-amber-900 hover:text-white hover:bg-purple-950 transition-colors duration-600 focus:outline-none focus:text-white focus:bg-gray-600" href="{{ entry.url | safe }}" title="{{ entry.title }}">{{ entry.title }}</a>
                   {% endif %}
                 {% endfor %}
               {% endif %}
