@@ -56,8 +56,9 @@ site_description = "hi lovelies"
 
 # The main navigation menu
 menu_pages = [
-    { title = "Blog", url = "/blog/" },
     { title = "About", url = "/pages/about/" },
+    { title = "Blog", url = "/blog/" },
+    { title = "Projects", url = "/pages/projects/" },
 ]
 
 # The pages that appear in the footer
