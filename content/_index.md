@@ -1,6 +1,6 @@
 +++
 title = "Index Page"
-date = 1900-01-01
+#date = 1900-01-01
 +++
 
 <!-- Adapted from https://markdown-it.github.io/ -->
