@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v5
-        node-version: '21'
+        version: '21'
       # Download and run TailwindCSS
       - name: TailwindCSS Build
         run: |
