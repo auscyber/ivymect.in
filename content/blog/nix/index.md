@@ -28,6 +28,8 @@ e --> c
 
 Nix trys to fix this by trying to think of all dependencies on your entire system as a graph.
 
+<figure>
+
 ```graphviz
 strict digraph {
   "readline-8.3p1" -> "ncurses-6.5" [];
@@ -41,7 +43,13 @@ strict digraph {
 }
 ```
 
-<figcaption>vim dependency graph for nix</figcaption>
+<figcaption>vim dependency graph for nix <sup class="footnote-reference"><a href="#a">1</a></sup></figcaption>
+
+</figure>
+
+
+
+
 
 and these versions are maintained on your computer
 
@@ -56,6 +64,8 @@ where the package actually links to the *specific* version it needs.
 
 
 some packages have really complex package dependencies
+
+<figure>
 
 ```graphviz
 strict digraph {
@@ -133,7 +143,11 @@ strict digraph {
 }
 ```
 
-<figcaption>this is for neovim, i know you're not reading this on mobile and barely on desktop</figcaption>
+<figcaption>this is for neovim, i know you're not reading this on mobile and barely on desktop <sup class="footnote-reference"><a href="#a">1</a></sup></figcaption>
+
+</figure>
+
+
 
 Because each dependency is linked to a specific folder in the nix store with a specific hash associated with it (ignore my fake hashes) the system is reproducible and can be rolled back.
 
@@ -166,6 +180,4 @@ Right now i have a problem of having fixed a whole lot of things and submitted t
 
 
 
-
-
-
+[^a]: this was done using [GitHub - utdemir/nix-tree: Interactively browse dependency graphs of Nix derivations.](https://github.com/utdemir/nix-tree)

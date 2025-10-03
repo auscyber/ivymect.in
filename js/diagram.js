@@ -56,6 +56,7 @@ mermaid.initialize({
 	  pre.style = {}
 	  console.log("rendered mermaid")
     });
+
 });
 
 
