@@ -2,11 +2,17 @@
 
 @theme {
     --font-mono: 'Tiny5', monospace;
+
 }
 
 @layer utilities {
+    figcaption {
+        @apply text-sm text-gray-500 mt-2;
+        font-style: italic;
+        @apply m-2 -top-4 relative;
+    }
     .badge {
-        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium leading-4 
+        @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-sm font-medium leading-4
     }
     .badge-gray {
         @apply bg-gray-100 text-gray-800
@@ -40,8 +46,10 @@
     }
 
     .prose {
+
         @apply leading-normal;
     }
+
     .prose > * + * {
         @apply mt-4;
     }
@@ -75,6 +83,11 @@
     .prose pre.mermaid {
         @apply block my-4 font-mono text-sm overflow-x-hidden
     }
+	.prose pre.mermaid >  svg {
+		@apply mx-auto ;
+        
+            width: 95vw;
+	}
     .prose pre:not(.mermaid) {
         @apply block my-4 p-4 rounded-md font-mono text-sm shadow-md overflow-x-hidden
     }
@@ -121,7 +134,7 @@
         @apply text-base font-bold;
     }
     a {
-        @apply text-amber-600 no-underline; 
+        @apply text-amber-600 no-underline;
     }
     a:hover {
         @apply text-amber-400;

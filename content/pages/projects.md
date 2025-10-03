@@ -27,3 +27,5 @@ authors = ["Ivy Pierlot"]
 - my nur packages which contain some bleeding edge versions of some packages and also some things which just havent been added into nixpkgs yet and either:
   - i can't be bothered doing a pull request 
   - or, it's in progress
+
+[![auscyber/nur-packagess - GitHub](https://gh-card.dev/repos/auscyber/nur-packages.svg)](https://github.com/auscyber/nur-packages)
