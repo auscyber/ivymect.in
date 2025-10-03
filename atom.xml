@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
+    <title></title>
+    <link rel="self" type="application/atom+xml" href="https://ivymect.in/atom.xml"/>
+    <link rel="alternate" type="text/html" href="https://ivymect.in"/>
+    <generator uri="https://www.getzola.org/">Zola</generator>
+    <updated>2025-10-02T00:00:00+00:00</updated>
+    <id>https://ivymect.in/atom.xml</id>
+    <entry xml:lang="en">
+        <title>Nix is cool as hell</title>
+        <published>2025-10-02T00:00:00+00:00</published>
+        <updated>2025-10-02T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            
+              Unknown
+            
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://ivymect.in/blog/nix/"/>
+        <id>https://ivymect.in/blog/nix/</id>
+        
+        <content type="html" xml:base="https://ivymect.in/blog/nix/">&lt;p&gt;Okay so we are starting with nerd talk, but if you don&#x27;t wanna hear that skip to &lt;a href=&quot;https:&#x2F;&#x2F;ivymect.in&#x2F;blog&#x2F;nix&#x2F;#why&quot;&gt;here&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;p&gt;So if you&#x27;ve ever programmed i&#x27;m sure you have to deal with dependencies, downloading one thing or another to get something working. On Windows? absolute nightmare. On Mac, can be painful. Linux, ironically can also be extremely painful&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;mermaid&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-mermaid &quot;&gt;&lt;code class=&quot;language-mermaid&quot; data-lang=&quot;mermaid&quot;&gt;&lt;span&gt;flowchart LR
+&lt;&#x2F;span&gt;&lt;span&gt;a --&amp;gt; b
+&lt;&#x2F;span&gt;&lt;span&gt;a --&amp;gt; c
+&lt;&#x2F;span&gt;&lt;span&gt;a --&amp;gt; d
+&lt;&#x2F;span&gt;&lt;span&gt;a --&amp;gt; e
+&lt;&#x2F;span&gt;&lt;span&gt;d --&amp;gt; b
+&lt;&#x2F;span&gt;&lt;span&gt;d --&amp;gt; c
+&lt;&#x2F;span&gt;&lt;span&gt;e --&amp;gt; c
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;figcaption&gt;average deps moment&lt;&#x2F;figcaption&gt;
+&lt;p&gt;Nix trys to fix this by trying to think of all dependencies on your entire system as a graph.&lt;&#x2F;p&gt;
+&lt;figure&gt;
+&lt;pre data-lang=&quot;graphviz&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-graphviz &quot;&gt;&lt;code class=&quot;language-graphviz&quot; data-lang=&quot;graphviz&quot;&gt;&lt;span&gt;strict digraph {
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;readline-8.3p1&amp;quot; -&amp;gt; &amp;quot;ncurses-6.5&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;bash-interactive-5.3p3&amp;quot; -&amp;gt; &amp;quot;readline-8.3p1&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;bash-interactive-5.3p3&amp;quot; -&amp;gt; &amp;quot;libiconv-109&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;bash-interactive-5.3p3&amp;quot; -&amp;gt; &amp;quot;ncurses-6.5&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;vim-9.1.1623&amp;quot; -&amp;gt; &amp;quot;gawk-5.3.2&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;vim-9.1.1623&amp;quot; -&amp;gt; &amp;quot;libiconv-109&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;vim-9.1.1623&amp;quot; -&amp;gt; &amp;quot;bash-interactive-5.3p3&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;vim-9.1.1623&amp;quot; -&amp;gt; &amp;quot;ncurses-6.5&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;figcaption&gt;vim dependency graph for nix &lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#a&quot;&gt;1&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;and these versions are maintained on your computer&lt;&#x2F;p&gt;
+&lt;p&gt;as&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;&#x2F;nix&#x2F;store&#x2F;sha256dksadjksadjkasl-gawk-5.3.2
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;where the package actually links to the &lt;em&gt;specific&lt;&#x2F;em&gt; version it needs.&lt;&#x2F;p&gt;
+&lt;p&gt;some packages have really complex package dependencies&lt;&#x2F;p&gt;
+&lt;figure&gt;
+&lt;pre data-lang=&quot;graphviz&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-graphviz &quot;&gt;&lt;code class=&quot;language-graphviz&quot; data-lang=&quot;graphviz&quot;&gt;&lt;span&gt;strict digraph {
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;c-grammar-neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;libcxx-19.1.7&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3.13-greenlet-3.2.3&amp;quot; -&amp;gt; &amp;quot;libcxx-19.1.7&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3.13-greenlet-3.2.3&amp;quot; -&amp;gt; &amp;quot;python3-3.13.7&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;luajit-2.1.1741730670-env&amp;quot; -&amp;gt; &amp;quot;luajit-2.1.1741730670&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;tree-sitter-0.25.6&amp;quot; -&amp;gt; &amp;quot;libiconv-109&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;libutil-72&amp;quot; -&amp;gt; &amp;quot;libcxx-19.1.7&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;readline-8.3p1&amp;quot; -&amp;gt; &amp;quot;ncurses-6.5&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;gettext-0.25.1&amp;quot; -&amp;gt; &amp;quot;libcxx-19.1.7&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;gettext-0.25.1&amp;quot; -&amp;gt; &amp;quot;libiconv-109&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;gettext-0.25.1&amp;quot; -&amp;gt; &amp;quot;bash-5.3p3&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3.13-pynvim-0.6.0&amp;quot; -&amp;gt; &amp;quot;python3.13-greenlet-3.2.3&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3.13-pynvim-0.6.0&amp;quot; -&amp;gt; &amp;quot;python3-3.13.7&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3.13-pynvim-0.6.0&amp;quot; -&amp;gt; &amp;quot;bash-5.3p3&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3.13-pynvim-0.6.0&amp;quot; -&amp;gt; &amp;quot;python3.13-msgpack-1.1.1&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;query-grammar-neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;libcxx-19.1.7&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7&amp;quot; -&amp;gt; &amp;quot;openssl-3.5.1&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7&amp;quot; -&amp;gt; &amp;quot;xz-5.8.1&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7&amp;quot; -&amp;gt; &amp;quot;bzip2-1.0.8&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7&amp;quot; -&amp;gt; &amp;quot;mpdecimal-4.0.1&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7&amp;quot; -&amp;gt; &amp;quot;tzdata-2025b&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7&amp;quot; -&amp;gt; &amp;quot;mailcap-2.1.54&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7&amp;quot; -&amp;gt; &amp;quot;readline-8.3p1&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7&amp;quot; -&amp;gt; &amp;quot;bash-5.3p3&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7&amp;quot; -&amp;gt; &amp;quot;zlib-1.3.1&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7&amp;quot; -&amp;gt; &amp;quot;ncurses-6.5&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7&amp;quot; -&amp;gt; &amp;quot;gdbm-1.25-lib&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7&amp;quot; -&amp;gt; &amp;quot;expat-2.7.1&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7&amp;quot; -&amp;gt; &amp;quot;sqlite-3.50.2&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7&amp;quot; -&amp;gt; &amp;quot;libffi-39&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7-env&amp;quot; -&amp;gt; &amp;quot;python3.13-greenlet-3.2.3&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7-env&amp;quot; -&amp;gt; &amp;quot;python3.13-pynvim-0.6.0&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7-env&amp;quot; -&amp;gt; &amp;quot;python3-3.13.7&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3-3.13.7-env&amp;quot; -&amp;gt; &amp;quot;python3.13-msgpack-1.1.1&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;markdown_inline-grammar-neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;libcxx-19.1.7&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;lua-grammar-neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;libcxx-19.1.7&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;vim-grammar-neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;libcxx-19.1.7&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;libluv-1.51.0-1&amp;quot; -&amp;gt; &amp;quot;libuv-1.51.0&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;python3.13-msgpack-1.1.1&amp;quot; -&amp;gt; &amp;quot;python3-3.13.7&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;vimdoc-grammar-neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;libcxx-19.1.7&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;c-grammar-neovim-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;luajit-2.1.1741730670-env&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;query-grammar-neovim-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;bash-5.3p3&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;python3-3.13.7-env&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;markdown_inline-grammar-neovim-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;lua-grammar-neovim-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;vim-grammar-neovim-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;vimdoc-grammar-neovim-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;markdown-grammar-neovim-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;neovim-unwrapped-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;sqlite-3.50.2&amp;quot; -&amp;gt; &amp;quot;zlib-1.3.1&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;markdown-grammar-neovim-0.11.4&amp;quot; -&amp;gt; &amp;quot;libcxx-19.1.7&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;luajit2.1-lpeg-1.1.0-2&amp;quot; -&amp;gt; &amp;quot;luajit-2.1.1741730670&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;luajit-2.1.1741730670&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;c-grammar-neovim-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;libuv-1.51.0&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;tree-sitter-0.25.6&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;libutil-72&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;libiconv-109&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;gettext-0.25.1&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;query-grammar-neovim-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;unibilium-2.1.2&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;utf8proc-2.10.0&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;bash-5.3p3&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;markdown_inline-grammar-neovim-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;lua-grammar-neovim-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;vim-grammar-neovim-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;libluv-1.51.0-1&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;vimdoc-grammar-neovim-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;markdown-grammar-neovim-0.11.4&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;  &amp;quot;neovim-unwrapped-0.11.4&amp;quot; -&amp;gt; &amp;quot;luajit2.1-lpeg-1.1.0-2&amp;quot; [];
+&lt;&#x2F;span&gt;&lt;span&gt;}
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;figcaption&gt;this is for neovim, i know you&#x27;re not reading this on mobile and barely on desktop &lt;sup class=&quot;footnote-reference&quot;&gt;&lt;a href=&quot;#a&quot;&gt;1&lt;&#x2F;a&gt;&lt;&#x2F;sup&gt;&lt;&#x2F;figcaption&gt;
+&lt;&#x2F;figure&gt;
+&lt;p&gt;Because each dependency is linked to a specific folder in the nix store with a specific hash associated with it (ignore my fake hashes) the system is reproducible and can be rolled back.&lt;&#x2F;p&gt;
+&lt;pre data-lang=&quot;bash&quot; style=&quot;background-color:#191919;color:#f8f8f2;&quot; class=&quot;language-bash &quot;&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;&#x2F;nix&#x2F;store&#x2F;blabla-neovim-unwrapped-0.11.4
+&lt;&#x2F;span&gt;&lt;span style=&quot;color:#e9fdac;&quot;&gt;&#x2F;nix&#x2F;store&#x2F;etcetc-markdown_inline-grammar-neovim-0.11.4
+&lt;&#x2F;span&gt;&lt;&#x2F;code&gt;&lt;&#x2F;pre&gt;
+&lt;p&gt;This idea of linked dependencies and pinned versions of dependencies can in fact be extended to a whole system, installed packages simply become dependencies of the &lt;code&gt;system&lt;&#x2F;code&gt; as opposed to individual parts. They become part of a well oiled whole that dedupes and calculates exactly what is needed for your scenario&lt;&#x2F;p&gt;
+&lt;h1 id=&quot;why&quot;&gt;Why?&lt;&#x2F;h1&gt;
+&lt;p&gt;When you have a system that is reproducible and configurable, you stop thinking about losing things.&lt;&#x2F;p&gt;
+&lt;p&gt;Some would say you should just back up all your hard drives, do that one at home, one somewhere else and one in the cloud type backup.&lt;&#x2F;p&gt;
+&lt;p&gt;But backing up a whole hard drive with configuration is wasteful and expensive.&lt;&#x2F;p&gt;
+&lt;p&gt;The only real things you should be backing up is data like photos or documents.&lt;&#x2F;p&gt;
+&lt;p&gt;You don&#x27;t need to backup an application, you just need to backup that you &lt;em&gt;&lt;strong&gt;have&lt;&#x2F;strong&gt;&lt;&#x2F;em&gt; that program, not the program itself. And even better, with a pinned version. You just need to track it. Nix can do that.&lt;&#x2F;p&gt;
+&lt;p&gt;My configuration for my mac, my desktop, my server, &lt;strong&gt;TOTAL&lt;&#x2F;strong&gt; a couple megabytes. I declare my configuration in files and use nix to deploy it. &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;nix-darwin&#x2F;nix-darwin&quot;&gt;nix-darwin&lt;&#x2F;a&gt; allows this and is a bit sketchy sometimes because lots of people don&#x27;t have macs in the nerdy nix community so sometimes packages do work but havent been tested.&lt;&#x2F;p&gt;
+&lt;p&gt;A big problem right now is that apples libraries are a bit of a nightmare to package and programs tend to require code signing. If you&#x27;re building things yourself, you don&#x27;t tend to have that, even if they are thankfully cached on nixpkgs servers with &lt;a href=&quot;https:&#x2F;&#x2F;hydra.nixos.org&quot;&gt;hydra&lt;&#x2F;a&gt; and &lt;a href=&quot;https:&#x2F;&#x2F;cache.nixos.org&quot;&gt;cachix&lt;&#x2F;a&gt; but if you change &lt;em&gt;one&lt;&#x2F;em&gt; thing it can invalidate the caches and suddenly you&#x27;re building everything from scratch. Five hours later and you&#x27;re compiling firefox and in tears and you are like &lt;code&gt;isnt this just like gentoo&lt;&#x2F;code&gt; .&lt;&#x2F;p&gt;
+&lt;p&gt;Right now i have a problem of having fixed a whole lot of things and submitted them as requests to be integrated  for &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;nix-community&#x2F;home-manager&quot;&gt;home-manager&lt;&#x2F;a&gt;, &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;nix-darwin&#x2F;nix-darwin&quot;&gt;nix-darwin&lt;&#x2F;a&gt; and even the nix package repository itself,  &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;nixos&#x2F;nixpkgs&quot;&gt;nixpkgs&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;div class=&quot;footnote-definition&quot; id=&quot;a&quot;&gt;&lt;sup class=&quot;footnote-definition-label&quot;&gt;1&lt;&#x2F;sup&gt;
+&lt;p&gt;this was done using &lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;utdemir&#x2F;nix-tree&quot;&gt;GitHub - utdemir&#x2F;nix-tree: Interactively browse dependency graphs of Nix derivations.&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>About</title>
+        <published>2025-10-02T00:00:00+00:00</published>
+        <updated>2025-10-02T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Ivy Pierlot
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://ivymect.in/pages/about/"/>
+        <id>https://ivymect.in/pages/about/</id>
+        
+        <content type="html" xml:base="https://ivymect.in/pages/about/">&lt;h2 id=&quot;who-am-i&quot;&gt;Who am I?&lt;&#x2F;h2&gt;
+&lt;p&gt;hi i&#x27;m ivy
+i&#x27;m a student studying politics, sociology and french.
+i like programming, reading, writing, learning, and tryna fix this world&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Projects</title>
+        <published>2025-10-02T00:00:00+00:00</published>
+        <updated>2025-10-02T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Ivy Pierlot
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://ivymect.in/pages/projects/"/>
+        <id>https://ivymect.in/pages/projects/</id>
+        
+        <content type="html" xml:base="https://ivymect.in/pages/projects/">&lt;h1 id=&quot;currently-working-on&quot;&gt;Currently working on&lt;&#x2F;h1&gt;
+&lt;ul&gt;
+&lt;li&gt;my degree&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;sociology&quot;&gt;sociology&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;a lil bit of talking about trans sexual experiences that are severely under researched&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;political-stuff&quot;&gt;political stuff&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;tryna see what the hell is our futue&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;h2 id=&quot;tech&quot;&gt;tech&lt;&#x2F;h2&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;tryna get m4 on &lt;a href=&quot;https:&#x2F;&#x2F;asahilinux.org&quot;&gt;asahi linux&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;my silly dotfiles
+&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;auscyber&#x2F;dotfiles&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;gh-card.dev&#x2F;repos&#x2F;auscyber&#x2F;dotfiles.svg&quot; alt=&quot;auscyber&#x2F;dotfiles - GitHub&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+&lt;&#x2F;li&gt;
+&lt;li&gt;
+&lt;p&gt;my nur packages which contain some bleeding edge versions of some packages and also some things which just havent been added into nixpkgs yet and either:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;i can&#x27;t be bothered doing a pull request&lt;&#x2F;li&gt;
+&lt;li&gt;or, it&#x27;s in progress&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;&lt;a href=&quot;https:&#x2F;&#x2F;github.com&#x2F;auscyber&#x2F;nur-packages&quot;&gt;&lt;img src=&quot;https:&#x2F;&#x2F;gh-card.dev&#x2F;repos&#x2F;auscyber&#x2F;nur-packages.svg&quot; alt=&quot;auscyber&#x2F;nur-packagess - GitHub&quot; &#x2F;&gt;&lt;&#x2F;a&gt;&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Terms</title>
+        <published>2020-01-08T00:00:00+00:00</published>
+        <updated>2020-01-08T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Thomas Weitzel
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://ivymect.in/pages/terms/"/>
+        <id>https://ivymect.in/pages/terms/</id>
+        
+        <content type="html" xml:base="https://ivymect.in/pages/terms/">&lt;p&gt;&lt;em&gt;These terms have been last updated on January 8, 2020&lt;&#x2F;em&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;All content on this web site is for informational purposes only.&lt;&#x2F;p&gt;
+&lt;p&gt;As the owner of this web site, I ...&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;make no representations as to the accuracy or completeness of any information on this site or by following any link.&lt;&#x2F;li&gt;
+&lt;li&gt;will not be liable for any errors or omissions in this information, nor for the availability of this information.&lt;&#x2F;li&gt;
+&lt;li&gt;will not be liable for any losses, injuries, or damages from the display or use of this information.&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;These terms are subject to change at any time and without notice.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+    <entry xml:lang="en">
+        <title>Privacy Policy</title>
+        <published>2019-03-11T00:00:00+00:00</published>
+        <updated>2019-03-11T00:00:00+00:00</updated>
+        
+        <author>
+          <name>
+            Thomas Weitzel
+          </name>
+        </author>
+        
+        <link rel="alternate" type="text/html" href="https://ivymect.in/pages/privacy/"/>
+        <id>https://ivymect.in/pages/privacy/</id>
+        
+        <content type="html" xml:base="https://ivymect.in/pages/privacy/">&lt;h3 id=&quot;data-protection&quot;&gt;Data protection&lt;&#x2F;h3&gt;
+&lt;p&gt;The use of my website is possible without providing personal data.
+If personal data can be entered (for example: name, address, or email addresses), this is on a voluntary basis.
+These data will not be disclosed to third parties without your explicit consent.&lt;&#x2F;p&gt;
+&lt;p&gt;Data transmission in the Internet (e.g.
+in the communication by email) can have security gaps.
+A complete protection of the data from access by third parties is not possible.
+The use of contact data published in the imprint by third parties for sending me unsolicited advertising and information materials is hereby prohibited.
+I reserve the right to take legal action in the event of unsolicited promotional information, such as spam emails.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;hosting&quot;&gt;Hosting&lt;&#x2F;h3&gt;
+&lt;p&gt;I host my website at netcup. The provider is netcup GmbH, Daimlerstr. 25, 76185 Karlsruhe, referred to as &quot;netcup&quot;.&lt;&#x2F;p&gt;
+&lt;p&gt;Details on netcup&#x27;s privacy policy can be found on their homepage under &lt;a href=&quot;https:&#x2F;&#x2F;www.netcup.eu&#x2F;kontakt&#x2F;datenschutzerklaerung.php&quot;&gt;privacy policy&lt;&#x2F;a&gt;.&lt;&#x2F;p&gt;
+&lt;p&gt;The use of netcup is based on Article 6(1)(f) GDPR.
+I have a legitimate interest that my website is available to visitors as reliably as possible.
+If consent was requested, data processing takes place exclusively based on Article 6(1)(a) GDPR.
+Consent can be revoked at any time.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;data-processing&quot;&gt;Data processing&lt;&#x2F;h3&gt;
+&lt;p&gt;I have signed a data processing contract with netcup.
+This contract is required by privacy law and guarantees, that data of visitors of my website will be processed in compliance with the GDPR.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;responsible-controller&quot;&gt;Responsible controller&lt;&#x2F;h3&gt;
+&lt;p&gt;The person responsible for data processing on this website is the person named in the [imprint]({{&amp;lt; relref &quot;imprint&quot; &amp;gt;}}).
+The &quot;responsible controller&quot; means the natural or legal person who decides on the processing of data (for example: name, address, or email addresses).&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;information-cancellation-deletion&quot;&gt;Information, cancellation, deletion&lt;&#x2F;h3&gt;
+&lt;p&gt;At any time you have the right to free information about your stored personal data, its origins, recipients, and the purpose of the data processing, as well as a right to correction or deletion of this data.
+You can contact me at any time via the address given in the imprint for further questions on the subject of your personal data.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;log-files-on-the-server&quot;&gt;Log files on the server&lt;&#x2F;h3&gt;
+&lt;p&gt;The web server stores information in its log files, some of which your browser transmits to me.
+These are:&lt;&#x2F;p&gt;
+&lt;ul&gt;
+&lt;li&gt;the IP address of your computer&lt;&#x2F;li&gt;
+&lt;li&gt;the time of the request&lt;&#x2F;li&gt;
+&lt;li&gt;the name of the requested page&lt;&#x2F;li&gt;
+&lt;li&gt;a status code (if the request was successful or not)&lt;&#x2F;li&gt;
+&lt;li&gt;the referrer URL&lt;&#x2F;li&gt;
+&lt;li&gt;the browser type, browser version and other information sent by your browser&lt;&#x2F;li&gt;
+&lt;&#x2F;ul&gt;
+&lt;p&gt;This data can not be used to identify a specific person.
+I will not merge this data with other data sources.
+I reserve the right to check this data retrospectively, if I become aware of illegal use of my website.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;ssl-encryption&quot;&gt;SSL encryption&lt;&#x2F;h3&gt;
+&lt;p&gt;This site uses SSL encryption for security reasons and to protect the transmission of sensitive content, such as the requests you send to me.
+An encrypted connection can be recognized by the fact that the address in the address bar of the browser starts with &lt;code&gt;https:&#x2F;&#x2F;&lt;&#x2F;code&gt; and a lock symbol nearby.
+If SSL encryption is enabled, the data you submit to me can not be read by third parties.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;cookies&quot;&gt;Cookies&lt;&#x2F;h3&gt;
+&lt;p&gt;This site uses functional cookies only on pages where math formulas are displayed with the help of the &lt;a href=&quot;https:&#x2F;&#x2F;www.mathjax.org&#x2F;&quot;&gt;MathJax&lt;&#x2F;a&gt; library.
+These cookies are only used in the context of MathJax and the display of math formulas.
+The readability of the website represents a legitimate interest within the meaning of Article 6(1)(f) GDPR.
+I do not use any other cookies on this website.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;embedded-content-from-other-websites&quot;&gt;Embedded content from other websites&lt;&#x2F;h3&gt;
+&lt;p&gt;Posts on this site may contain embedded content (e.g. videos, pictures, comments, etc.).
+Embedded content from other websites behaves just as if the visitor had visited the other website.&lt;&#x2F;p&gt;
+&lt;p&gt;These websites may collect information about you, use cookies, embed additional third-party tracking services, and record your interaction with this embedded content, if you have an account and are logged in to this other site.&lt;&#x2F;p&gt;
+&lt;h3 id=&quot;what-rights-do-you-have-to-your-data&quot;&gt;What rights do you have to your data?&lt;&#x2F;h3&gt;
+&lt;p&gt;You may request that I export your personal information, including any data you have provided to me.
+In addition, you may request the deletion of any personal information I have stored about you.
+This does not include the data that I need to keep for administrative, legal, or security-related purposes.&lt;&#x2F;p&gt;
+</content>
+        
+    </entry>
+</feed>
