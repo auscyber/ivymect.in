@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
 @theme {
-    --font-mono: 'Tiny5', monospace;
+    --font-mono: 'Source Code Pro', monospace;
+	--font-sans: 'Roboto Condensed';
 
 }
 
@@ -47,6 +48,7 @@
 
     .prose {
 
+
         @apply leading-normal;
     }
 
@@ -78,15 +80,19 @@
         @apply border-l-4 border-gray-600 pl-4 italic;
     }
     .prose kbd, p code, .prose ol code, .prose ul code {
+
         @apply mx-0.5 px-1 py-0.5 font-mono text-sm bg-gray-200 rounded shadow-sm ring-1 ring-gray-900/25;
     }
     .prose pre.mermaid {
+
         @apply block my-4 font-mono text-sm overflow-x-hidden
     }
 	.prose pre.mermaid >  svg {
-		@apply mx-auto ;
-        
+		@apply mx-auto  ;
+
             width: 95vw;
+	}
+	.prose {
 	}
     .prose pre:not(.mermaid) {
         @apply block my-4 p-4 rounded-md font-mono text-sm shadow-md overflow-x-hidden

@@ -13,9 +13,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name=generator content="{{ config.extra.generator | default(value='Zola') }}">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Tiny5&display=swap" rel="stylesheet">
-
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&family=Tiny5&display=swap" rel="stylesheet">
   {% if page.description %}
     <meta name="description" content="{{ page.description }}">
   {% elif config.description %}
@@ -41,9 +40,11 @@
     <script defer src="/js/katex-config.js" integrity="sha384-YTwoxG+UASh+luh6A7HRGGG9fiJpEYcH1r0/xbJP0wfpH/E4eU3lG9mg4U5OUz9S"></script>
   {% endif %}
   {% if page.extra.diagram %}
-    <script defer src="https://cdn.jsdelivr.net/npm/@mermaid-js/tiny@11/dist/mermaid.tiny.js"></script>
-    <script defer src="/js/diagram/bundle.js"></script>
-    <script defer src="/js/diagram/otherDeps/bundle.js" ></script>
+
+   <script defer src="/js/diagram/mermaid.bundle.js"></script>
+    <script defer src="/js/diagram/otherDeps.bundle.js" ></script>
+    <script defer src="/js/diagram/main.bundle.js"></script>
+
   {% endif %}
 </head>
 <body>

@@ -4,17 +4,14 @@ const webpack = require("webpack");
 const TerserPlugin = require("terser-webpack-plugin");
 const { default: mermaid } = require("mermaid");
 module.exports = {
-  externals: {
-    mermaid: "mermaid",
-  },
 
   mode: "production",
 
   entry: {
-    diagram: "./js/diagram.js",
+    "diagram/main": "./js/diagram.js",
   },
   output: {
-    filename: "[name]/bundle.js",
+    filename: "[name].bundle.js",
     path: path.resolve(__dirname, "static/js"),
   },
   plugins: [
@@ -37,6 +34,11 @@ module.exports = {
     ],
     splitChunks: {
       cacheGroups: {
+		mermaid: {
+			test: /[\\/]node_modules[\\/]mermaid[\\/]/,
+			name: "diagram/mermaid",
+			chunks: "all",
+		},
         common: {
           test: /[\\/]node_modules[\\/](?!mermaid)/,
           name: "diagram/otherDeps",

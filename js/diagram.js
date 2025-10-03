@@ -1,6 +1,6 @@
 // ATTENTION: if you change this file, make sure to re-calculate the integrity hash used in base.html
+import Dot2MermaidAdapter from  "dot2mermaid/src/dot2mermaid.mjs";
 import mermaid from "mermaid";
-import Dot2MermaidAdapter from /* webpackPrefetch: true */ "dot2mermaid/src/dot2mermaid.mjs";
 import Handlebars from "handlebars";
 
 Handlebars.registerHelper("labeled", function (value) {
@@ -27,32 +27,35 @@ flowchart {{direction}}
   {{/if}}
 `);
 document.addEventListener("DOMContentLoaded", function () {
-  document.querySelectorAll("code[data-lang='graphviz']").forEach((element) => {
+	console.log("loaded question mark")
+mermaid.initialize({
+			startOnLoad: true,
+			theme: 'default',
+	})
+
+
+  document.querySelectorAll("code[data-lang='graphviz']").forEach(async (element) => {
     let graphContext = new Dot2MermaidAdapter(
       element.textContent
     ).getGraphContext();
     let renderedMermaiFlowchart = mermaidFlowchartTemplate(graphContext);
+	  console.log(renderedMermaiFlowchart)
     const pre = element.parentElement;
-    if (pre.tagName.toLowerCase() === "pre") {
-      pre.className = "mermaid";
-      pre.style = {};
-      pre.textContent = `
-      ${renderedMermaiFlowchart}
-      `;
-    }
+	  pre.className = "mermaid"
+	  pre.style = {}
+	  pre.textContent = renderedMermaiFlowchart;
+	  console.log("rendered")
+
+
   });
-  document.querySelectorAll("code[data-lang='mermaid']").forEach((element) => {
+  document.querySelectorAll("code[data-lang='mermaid']").forEach(async (element) => {
     console.log("Found mermaid diagram");
     const pre = element.parentElement;
-    if (pre.tagName.toLowerCase() === "pre") {
-      pre.className = "mermaid";
-      pre.style = {};
-      pre.textContent = element.textContent;
-    }
-  });
-  mermaid.initialize({
-    layout: "elk",
-    startOnLoad: true,
-    logLevel: "error",
-  });
+	  pre.textContent = element.textContent;
+	  pre.className = "mermaid"
+	  pre.style = {}
+	  console.log("rendered mermaid")
+    });
 });
+
+

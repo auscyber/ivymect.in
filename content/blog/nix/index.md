@@ -164,8 +164,8 @@ A big problem right now is that apples libraries are a bit of a nightmare to pac
 
 Right now i have a problem of having fixed a whole lot of things and submitted them as requests to be integrated  for [home-manager](https://github.com/nix-community/home-manager), [nix-darwin](https://github.com/nix-darwin/nix-darwin) and even the nix package repository itself,  [nixpkgs](https://github.com/nixos/nixpkgs)
 
-{{ github_repo(user="nix-community", repo="home-manager") }}
 
-{{ github_repo(user="nix-darwin", repo="nix-darwin") }}
 
-{{ github_repo(user="nixos",repo="nixpkgs") }}
+
+
+
