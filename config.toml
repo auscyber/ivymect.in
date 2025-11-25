@@ -46,7 +46,7 @@ generator = "Zola v0.21"
 favicon_svg = "/img/yin-yang.svg"
 
 # The copyright notice
-copyright = "Copyright {year} by Ivy Pierlot"
+copyright = "© ivy, {year}"
 
 # The description shown on banner
 site_description = "hi lovelies"
@@ -63,8 +63,8 @@ menu_pages = [
 
 # The pages that appear in the footer
 footer_pages = [
-    { title = "Privacy Policy", url = "/pages/privacy/" },
-    { title = "Terms", url = "/pages/terms/" },
+#    { title = "Privacy Policy", url = "/pages/privacy/" },
+#    { title = "Terms", url = "/pages/terms/" },
 ]
 
 social_links = [
